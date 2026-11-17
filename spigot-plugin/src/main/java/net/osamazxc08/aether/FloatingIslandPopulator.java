@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 
-/** Generates one small floating island in a subset of newly populated overworld chunks. */
+/** Generates one small floating island in a subset of newly populated chunks. */
 final class FloatingIslandPopulator extends BlockPopulator {
     private static final long X_SALT = 341873128712L;
     private static final long Z_SALT = 132897987541L;
@@ -16,17 +16,15 @@ final class FloatingIslandPopulator extends BlockPopulator {
     public void populate(World world, Random random, Chunk source) {
         int chunkX = source.getX();
         int chunkZ = source.getZ();
-        long seed = world.getSeed() ^ ((long) chunkX * X_SALT) ^ ((long) chunkZ * Z_SALT);
-        Random islandRandom = new Random(seed);
+        Random islandRandom = AetherSkyIslandsPlugin.worldRandom(world.getSeed(), chunkX, chunkZ);
 
-        // Sparse placement preserves the usual terrain between islands.
         if (islandRandom.nextInt(18) != 0) {
             return;
         }
 
         int centerX = (chunkX << 4) + 5 + islandRandom.nextInt(6);
         int centerZ = (chunkZ << 4) + 5 + islandRandom.nextInt(6);
-        int surfaceY = 105 + islandRandom.nextInt(56);
+        int surfaceY = 95 + islandRandom.nextInt(55);
         int radius = 4 + islandRandom.nextInt(3);
         double radiusSquared = radius * radius;
 
@@ -43,15 +41,15 @@ final class FloatingIslandPopulator extends BlockPopulator {
                 int depth = 2 + (int) Math.round((1.0D - normalized) * 5.0D);
 
                 for (int y = topY - depth; y <= topY; y++) {
-                    Material material;
+                    Material mat;
                     if (y == topY) {
-                        material = Material.GRASS;
+                        mat = Material.GRASS;
                     } else if (y >= topY - 2) {
-                        material = Material.DIRT;
+                        mat = Material.DIRT;
                     } else {
-                        material = Material.STONE;
+                        mat = Material.STONE;
                     }
-                    world.getBlockAt(x, y, z).setType(material, false);
+                    world.getBlockAt(x, y, z).setType(mat, false);
                 }
             }
         }

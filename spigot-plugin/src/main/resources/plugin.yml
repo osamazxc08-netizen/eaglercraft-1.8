@@ -3,3 +3,7 @@ version: 1.0.0
 main: net.osamazxc08.aether.AetherSkyIslandsPlugin
 author: osamazxc08-netizen
 description: Adds sparse floating islands to newly generated overworld chunks.
+commands:
+  aether:
+    description: Aether Sky Islands command
+    usage: /aether info | /aether regen
