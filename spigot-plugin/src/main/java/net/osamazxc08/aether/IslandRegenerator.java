@@ -39,6 +39,10 @@ final class IslandRegenerator {
                     }
                     world.getBlockAt(baseX + dx, y, baseZ + dz).setType(mat, false);
                 }
+
+                if (random.nextBoolean() && Math.abs(dx) <= 1 && Math.abs(dz) <= 1) {
+                    world.getBlockAt(baseX + dx, topY + 1, baseZ + dz).setType(Material.WOOL, false);
+                }
             }
         }
     }

@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 
-/** Generates one small floating island in a subset of newly populated chunks. */
 final class FloatingIslandPopulator extends BlockPopulator {
     private static final long X_SALT = 341873128712L;
     private static final long Z_SALT = 132897987541L;
@@ -50,6 +49,14 @@ final class FloatingIslandPopulator extends BlockPopulator {
                         mat = Material.STONE;
                     }
                     world.getBlockAt(x, y, z).setType(mat, false);
+                }
+
+                if (islandRandom.nextBoolean()) {
+                    for (int cloudY = topY + 1; cloudY <= topY + 2; cloudY++) {
+                        if (Math.abs(dx) <= 1 && Math.abs(dz) <= 1) {
+                            world.getBlockAt(x, cloudY, z).setType(Material.WOOL, false);
+                        }
+                    }
                 }
             }
         }
