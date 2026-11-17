@@ -1,0 +1,59 @@
+package net.osamazxc08.aether;
+
+import java.util.Random;
+
+import org.bukkit.Chunk;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.generator.BlockPopulator;
+
+/** Generates one small floating island in a subset of newly populated overworld chunks. */
+final class FloatingIslandPopulator extends BlockPopulator {
+    private static final long X_SALT = 341873128712L;
+    private static final long Z_SALT = 132897987541L;
+
+    @Override
+    public void populate(World world, Random random, Chunk source) {
+        int chunkX = source.getX();
+        int chunkZ = source.getZ();
+        long seed = world.getSeed() ^ ((long) chunkX * X_SALT) ^ ((long) chunkZ * Z_SALT);
+        Random islandRandom = new Random(seed);
+
+        // Sparse placement preserves the usual terrain between islands.
+        if (islandRandom.nextInt(18) != 0) {
+            return;
+        }
+
+        int centerX = (chunkX << 4) + 5 + islandRandom.nextInt(6);
+        int centerZ = (chunkZ << 4) + 5 + islandRandom.nextInt(6);
+        int surfaceY = 105 + islandRandom.nextInt(56);
+        int radius = 4 + islandRandom.nextInt(3);
+        double radiusSquared = radius * radius;
+
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dz = -radius; dz <= radius; dz++) {
+                double normalized = (dx * dx + dz * dz) / radiusSquared;
+                if (normalized > 1.0D) {
+                    continue;
+                }
+
+                int x = centerX + dx;
+                int z = centerZ + dz;
+                int topY = surfaceY + (int) Math.round((1.0D - normalized) * 2.0D);
+                int depth = 2 + (int) Math.round((1.0D - normalized) * 5.0D);
+
+                for (int y = topY - depth; y <= topY; y++) {
+                    Material material;
+                    if (y == topY) {
+                        material = Material.GRASS;
+                    } else if (y >= topY - 2) {
+                        material = Material.DIRT;
+                    } else {
+                        material = Material.STONE;
+                    }
+                    world.getBlockAt(x, y, z).setType(material, false);
+                }
+            }
+        }
+    }
+}
