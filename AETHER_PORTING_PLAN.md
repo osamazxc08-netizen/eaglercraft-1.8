@@ -2,6 +2,10 @@
 
 This repository is the EaglercraftX 1.8 browser-client source/patch tooling. The Aether Edition is a compatibility port, not a drop-in Forge mod install.
 
+## Source tree review (upstream `main`)
+
+The supplied `sources/` directory is present and was inspected. It contains Eaglercraft-specific Java packages under `sources/main/java` (including the `net/lax1dude` namespace), LWJGL/browser compatibility code, protocol modules, TeaVM/WASM modules, setup templates, and client resources. This is useful project source, but it does **not** contradict the upstream README: the decompiled vanilla Minecraft 1.8 game source and its required MCP configuration are still excluded. The visible `sources/resources` directory contains Eaglercraft client/resource files; it is not a replacement for the missing MCP workspace inputs.
+
 ## Current repository constraints
 
 - The repository README states that the decompiled Minecraft 1.8 source and game resources are not included.
