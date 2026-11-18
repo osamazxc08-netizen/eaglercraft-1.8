@@ -11,11 +11,15 @@ jobs:
           command: |
             sh -n scripts/check-aether-prereqs.sh
             sh -n scripts/test-aether-prereqs.sh
+            sh -n scripts/check-aether-source-layout.sh
             echo "Shell syntax checks passed."
       - run:
           name: Test prerequisite checker behavior
           command: |
             sh scripts/test-aether-prereqs.sh
+      - run:
+          name: Validate source layout and browser build pipeline
+          command: sh scripts/check-aether-source-layout.sh
       - run:
           name: Check porting plan is present
           command: |
