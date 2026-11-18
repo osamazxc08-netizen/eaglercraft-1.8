@@ -88,3 +88,24 @@ Add original or properly licensed blocks, items, creatures, structures, ambient 
 ## Current blocker
 
 The repository intentionally omits the decompiled Minecraft source and required MCP inputs. The exact missing local inputs are listed above. Until those inputs are prepared and a baseline workspace is generated, it is not possible to safely implement or compile Java gameplay changes here. The next concrete step is to prepare Phase 0 locally without adding the game JAR, MCP archive, or asset index to this public repository.
+
+
+## Verified source-layout findings (upstream `main`)
+
+The following details were checked against files in the supplied `sources/` tree:
+
+- `sources/main/java/net/lax1dude/eaglercraft/v1_8/EaglercraftVersion.java` is the fork identity/version configuration point. It currently identifies the upstream fork as EaglercraftX u44; this is metadata/configuration, not a gameplay extension API.
+- `sources/setup/eclipseProjectFiles/.project` defines separate linked source folders for `MAIN_SRC_FOLDER`, `GAME_SRC_FOLDER`, `PROTO_GAME_SRC_FOLDER`, `PROTO_RELAY_SRC_FOLDER`, and `LWJGL_SRC_FOLDER`. This confirms the intended workspace separates browser/client support code from generated game source and protocol code.
+- `mcp918/readme.txt` independently confirms the exact local MCP inputs required before `build_init`: `mcp918.zip`, `1.8.8.jar`, and `1.8.json`.
+
+### Consequence for the Aether port
+
+Do not implement dimension, block, item, entity, or world-generation code in the Eaglercraft support packages merely because they are visible in `sources/main/java`. Those features belong in the generated game-source workspace (the Eclipse template's `GAME_SRC_FOLDER`) and must be mapped against the actual 1.8.8 classes after workspace generation. The protocol and LWJGL folders are separate compatibility layers; they are not substitutes for Minecraft gameplay classes.
+
+### Phase 1 status
+
+- [x] Confirm the Eaglercraft fork identity/version configuration file.
+- [x] Confirm the Eclipse workspace separates main, game, protocol, and LWJGL source folders.
+- [x] Confirm exact MCP input filenames from the repository's own setup readme.
+- [ ] Inspect generated game-source classes and identify dimension/world-generation hooks. Blocked until the authorized local MCP workspace exists.
+- [ ] Build and launch an unchanged baseline client before gameplay changes.
