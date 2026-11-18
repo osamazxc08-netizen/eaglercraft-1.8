@@ -15,6 +15,8 @@ The supplied `sources/` directory is present and was inspected. It contains Eagl
 
 ## Local prerequisite checker
 
+A regression test for the checker is available at `scripts/test-aether-prereqs.sh`. Run it with `sh scripts/test-aether-prereqs.sh`; it exercises missing-input detection, a Java 17 ready-path using temporary placeholder files, and rejection of Java 8. It creates no real MCP/Minecraft data. CircleCI is configured to run this test, but the hosted pipeline has not yet been triggered or verified.
+
 Run `sh scripts/check-aether-prereqs.sh` from the repository root before workspace setup. It checks the Java version, the three locally supplied MCP inputs, and the two setup scripts. It does not download files or modify the workspace. The checker is expected to report missing inputs until the authorized local setup files are present.
 
 ## Phase 0 — Exact workspace prerequisites
