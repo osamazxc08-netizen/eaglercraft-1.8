@@ -10,7 +10,12 @@ jobs:
           name: Check shell syntax
           command: |
             sh -n scripts/check-aether-prereqs.sh
-            echo "Shell syntax check passed."
+            sh -n scripts/test-aether-prereqs.sh
+            echo "Shell syntax checks passed."
+      - run:
+          name: Test prerequisite checker behavior
+          command: |
+            sh scripts/test-aether-prereqs.sh
       - run:
           name: Check porting plan is present
           command: |
