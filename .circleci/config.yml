@@ -1,0 +1,33 @@
+version: 2.1
+
+jobs:
+  validate-porting-scaffold:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Check shell syntax
+          command: |
+            sh -n scripts/check-aether-prereqs.sh
+            echo "Shell syntax check passed."
+      - run:
+          name: Check porting plan is present
+          command: |
+            test -s AETHER_PORTING_PLAN.md
+            grep -q "Phase 0" AETHER_PORTING_PLAN.md
+            grep -q "Current blocker" AETHER_PORTING_PLAN.md
+            echo "Porting plan check passed."
+      - run:
+          name: Prevent accidental commits of local game inputs
+          command: |
+            if git ls-files | grep -E '(^|/)(mcp918\.zip|1\.8\.8\.jar|1\.8\.json)$'; then
+              echo "ERROR: Local MCP/Minecraft inputs must not be committed to this public repository."
+              exit 1
+            fi
+            echo "No protected local game inputs are tracked."
+
+workflows:
+  validate-porting-scaffold:
+    jobs:
+      - validate-porting-scaffold
