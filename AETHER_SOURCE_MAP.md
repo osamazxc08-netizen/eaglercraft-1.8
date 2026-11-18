@@ -43,3 +43,20 @@ The repository scripts `build_init.sh` and `build_make_workspace.sh` then initia
 - Repository inspection and prerequisite tooling: prepared.
 - Native Aether gameplay implementation: not started; blocked on the generated MCP game workspace.
 - Full game build or playable artifact: not yet produced.
+
+
+## Browser build and asset pipeline (verified)
+
+The checked-in workspace template confirms two relevant build targets:
+
+- The JavaScript client template uses Gradle/TeaVM with `src/main/java`, `src/game/java`, `src/protocol-game/java`, `src/protocol-relay/java`, `src/teavm/java`, and `src/teavm-boot-menu/java` source roots. Its entry point is `net.lax1dude.eaglercraft.v1_8.internal.teavm.MainClass`.
+- The WASM-GC template is a separate build path. Its README specifies the order: compile EPK assets, compile WASM classes, compile EagRuntime JS, then bundle the client. It requires the Eaglercraft TeaVM fork, and documents limitations around reflection and asynchronous callbacks.
+
+The resource tree contains Eaglercraft boot-menu templates, client/runtime files, and deferred-rendering/PBR support assets. This is useful for packaging and client integration, but it does not establish that vanilla Minecraft's complete textures, sounds, models, or other game assets are present.
+
+## Consequences for an Aether release
+
+- Start with the JavaScript/TeaVM client target for the first browser smoke test; keep the WASM-GC target as a later, separate compatibility target.
+- Add Aether textures/models/sounds only through the generated workspace's supported resource/EPK pipeline, with assets that are original or otherwise properly licensed.
+- Avoid relying on reflection-heavy registration or Java asynchronous callbacks in the WASM-GC port without testing the documented TeaVM restrictions.
+- A successful EPK build alone is not a successful game build: the Java/TeaVM compilation and final offline-client packaging must also complete.
