@@ -9,6 +9,10 @@ This repository is the EaglercraftX 1.8 browser-client source/patch tooling. The
 - A Java Forge Aether mod cannot be loaded directly into Eaglercraft's browser runtime. Its gameplay systems must be reimplemented against the browser-compatible client/server code.
 - Only code and assets that the project owner has permission to use may be added. Use original or appropriately licensed textures, sounds, models, and other assets.
 
+## Local prerequisite checker
+
+Run `sh scripts/check-aether-prereqs.sh` from the repository root before workspace setup. It checks the Java version, the three locally supplied MCP inputs, and the two setup scripts. It does not download files or modify the workspace. The checker is expected to report missing inputs until the authorized local setup files are present.
+
 ## Phase 0 — Exact workspace prerequisites
 
 The repository's `mcp918/readme.txt` names these three files as required inputs in the `mcp918/` directory:
