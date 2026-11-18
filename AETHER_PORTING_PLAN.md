@@ -111,3 +111,8 @@ Do not implement dimension, block, item, entity, or world-generation code in the
 - [x] Confirm exact MCP input filenames from the repository's own setup readme.
 - [ ] Inspect generated game-source classes and identify dimension/world-generation hooks. Blocked until the authorized local MCP workspace exists.
 - [ ] Build and launch an unchanged baseline client before gameplay changes.
+
+
+## Additional source map
+
+A deeper package/resource inspection is recorded in [`AETHER_SOURCE_MAP.md`](AETHER_SOURCE_MAP.md). It identifies which visible folders are Eaglercraft platform support versus generated game source, lists the confirmed workspace prerequisites, and defines the safe order for implementing the native Aether port.
