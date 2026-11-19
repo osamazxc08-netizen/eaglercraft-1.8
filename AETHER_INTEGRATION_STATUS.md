@@ -38,7 +38,6 @@ Target: EaglercraftX 1.8.8, offline singleplayer
 - Saved worlds survive reload and work offline.
 - No release is described as complete until a built client passes these checks.
 
-
 ## Follow-up repository inspection (2026-11-20)
 
 - The branch's `mcp918/` directory currently contains only `1.8.json`, `assetsIndexTransformer.json`, and `readme.txt`. It does not contain the required `mcp918.zip` or `1.8.8.jar` inputs.
@@ -49,3 +48,11 @@ Target: EaglercraftX 1.8.8, offline singleplayer
 ## Next concrete dependency
 
 The next implementation step is blocked until a build environment can run the documented `BuildTools.jar init` and `workspace` tasks against the already supplied MCP archive and Minecraft 1.8.8 client JAR. Once that generated workspace exists, the dimension and portal changes can be made against real class names and verified by compilation rather than guessed.
+
+
+## Newly found build-workspace candidate (2026-11-20)
+
+- Located a public pre-generated EaglercraftX 1.8 workspace: `Eaglercraft-Archive/EaglercraftX-1_8-workspace`.
+- Its repository tree contains a Gradle project (`build.gradle.kts`, `gradlew`) and a large Java source tree (8,216 tree entries inspected). Its README says Java 17+ is required and documents building the JavaScript offline client with the `MakeOfflineDownload` script / `makeMainOfflineDownload` Gradle task.
+- This is a more direct starting point than rerunning MCP decompilation from scratch. However, it is a third-party read-only repository in the connected GitHub account, and the available tools still cannot clone/download its full source into a runnable Java environment or execute Gradle.
+- No Aether code has been merged into this workspace, and no compiled output or gameplay test has been produced. Treat it only as a candidate base, not as a finished client.
