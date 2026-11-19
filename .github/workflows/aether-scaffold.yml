@@ -1,0 +1,45 @@
+name: Aether scaffold validation
+
+on:
+  push:
+    branches:
+      - aether-porting-foundation
+  pull_request:
+    branches:
+      - aether-porting-foundation
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-porting-scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check shell syntax
+        run: |
+          sh -n scripts/check-aether-prereqs.sh
+          sh -n scripts/test-aether-prereqs.sh
+          sh -n scripts/check-aether-source-layout.sh
+
+      - name: Test prerequisite checker
+        run: sh scripts/test-aether-prereqs.sh
+
+      - name: Validate source layout and browser build map
+        run: sh scripts/check-aether-source-layout.sh
+
+      - name: Validate porting plan
+        run: |
+          test -s AETHER_PORTING_PLAN.md
+          grep -q "Phase 0" AETHER_PORTING_PLAN.md
+          grep -q "Current blocker" AETHER_PORTING_PLAN.md
+
+      - name: Prevent protected game inputs from entering the public repository
+        run: |
+          if git ls-files | grep -E '(^|/)(mcp918\.zip|1\.8\.8\.jar|1\.8\.json)$'; then
+            echo "ERROR: MCP/Minecraft setup inputs must remain local and must not be committed."
+            exit 1
+          fi
