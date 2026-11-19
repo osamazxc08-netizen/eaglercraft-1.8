@@ -56,3 +56,24 @@ The next implementation step is blocked until a build environment can run the do
 - Its repository tree contains a Gradle project (`build.gradle.kts`, `gradlew`) and a large Java source tree (8,216 tree entries inspected). Its README says Java 17+ is required and documents building the JavaScript offline client with the `MakeOfflineDownload` script / `makeMainOfflineDownload` Gradle task.
 - This is a more direct starting point than rerunning MCP decompilation from scratch. However, it is a third-party read-only repository in the connected GitHub account, and the available tools still cannot clone/download its full source into a runnable Java environment or execute Gradle.
 - No Aether code has been merged into this workspace, and no compiled output or gameplay test has been produced. Treat it only as a candidate base, not as a finished client.
+
+
+## Source-level integration map from the pre-generated workspace (2026-11-20)
+
+The public candidate workspace was inspected directly and contains actual deobfuscated Minecraft source, so the earlier assumption that no usable source could be found is superseded. Relevant confirmed source locations:
+
+- `src/game/java/net/minecraft/world/WorldProvider.java`: provider factory currently recognizes only dimension IDs -1, 0, and 1; this is the registration point for an Aether provider.
+- `src/game/java/net/minecraft/world/WorldServer.java`: creates each dimension's chunk provider from its WorldProvider and save handler, so a provider-specific chunk generator can plug into the existing chunk/save pipeline.
+- `src/game/java/net/minecraft/server/MinecraftServer.java`: currently allocates exactly three WorldServer entries and maps only Nether (-1), Overworld (0), and End (1). A fourth dimension needs coordinated server lifecycle, tick, save, and lookup changes.
+- `src/game/java/net/minecraft/entity/player/EntityPlayerMP.java`: contains `travelToDimension`; the existing player-transfer path can be extended for Aether travel.
+- `src/game/java/net/minecraft/block/BlockPortal.java` and `src/game/java/net/minecraft/world/Teleporter.java`: contain the vanilla portal behavior. A Glowstone + water Aether portal requires a separate activation/teleport implementation rather than changing the vanilla Nether portal semantics.
+- `src/game/java/net/minecraft/world/gen/ChunkProviderGenerate.java`: reference implementation for chunk generation; Aether floating-island generation needs a dedicated provider or a carefully scoped generator.
+
+The workspace README confirms Java 17+ and documents the offline JavaScript build task `makeMainOfflineDownload` (or `MakeOfflineDownload`). Its Gradle project is a plausible base for implementation, but it is owned by a third party and the connected account has read-only access.
+
+## Implementation state after source inspection
+
+- Confirmed: the candidate workspace has the actual dimension, portal, server, player-transfer, and chunk-generation classes needed to begin a real port.
+- Not yet changed: no source files in that third-party workspace have been modified; the connected GitHub account has no push permission there.
+- Not built: the Gradle task has not run, so no offline client artifact exists and no gameplay behavior has been tested.
+- Required next engineering work: create a writable fork/copy of the source workspace, add a fourth WorldServer dimension consistently across server arrays and lifecycle code, implement the Aether provider and floating-island chunk generator, add the Glowstone/water portal block and travel flow, then build and test the offline JavaScript client.
