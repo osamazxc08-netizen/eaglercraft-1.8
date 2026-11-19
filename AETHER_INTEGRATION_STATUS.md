@@ -37,3 +37,15 @@ Target: EaglercraftX 1.8.8, offline singleplayer
 - Aether terrain and structures generate consistently.
 - Saved worlds survive reload and work offline.
 - No release is described as complete until a built client passes these checks.
+
+
+## Follow-up repository inspection (2026-11-20)
+
+- The branch's `mcp918/` directory currently contains only `1.8.json`, `assetsIndexTransformer.json`, and `readme.txt`. It does not contain the required `mcp918.zip` or `1.8.8.jar` inputs.
+- The `sources/main/java/` tree contains Eaglercraft-specific namespaces (for example `net/lax1dude/eaglercraft`); it is not the generated/decompiled Minecraft source workspace.
+- The Aether prototype repository has a prebuilt standalone `dist/aether-skies-offline.html`, but it remains a separate browser game and cannot be dropped into the Eaglercraft client as a dimension.
+- GitHub code search did not return source matches for Minecraft dimension classes on these repositories. This is not proof those classes do not exist elsewhere; it confirms the integration targets cannot currently be inspected through the available repository search results.
+
+## Next concrete dependency
+
+The next implementation step is blocked until a build environment can run the documented `BuildTools.jar init` and `workspace` tasks against the already supplied MCP archive and Minecraft 1.8.8 client JAR. Once that generated workspace exists, the dimension and portal changes can be made against real class names and verified by compilation rather than guessed.
