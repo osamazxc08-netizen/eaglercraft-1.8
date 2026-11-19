@@ -8,6 +8,10 @@ sources/setup/workspace_template/build.gradle
 sources/setup/workspace_template/CompileJS.sh
 sources/setup/workspace_template/CompileEPK.sh
 sources/setup/workspace_template/wasm_gc_teavm/README.md
+build_init.sh
+build_make_workspace.sh
+buildtools/BuildTools.jar
+mcp918/readme.txt
 sources/resources/EPKVersionIdentifier.txt
 AETHER_PORTING_PLAN.md
 AETHER_SOURCE_MAP.md
